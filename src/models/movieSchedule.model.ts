@@ -6,7 +6,7 @@ const MovieScheduleSchema = new Schema<MovieSchedule>(
   {
     seats: {
       type: Array,
-      items: {
+      item: {
         type: Schema.Types.ObjectId,
         ref: modelNames.Seat,
       },

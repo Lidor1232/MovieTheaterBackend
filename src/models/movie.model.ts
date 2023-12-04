@@ -14,11 +14,12 @@ const MovieSchema = new Schema<Movie>(
     },
     durationInMinutes: {
       type: Number,
+      min: 1,
       required: true,
     },
     movieSchedules: {
       type: Array,
-      items: {
+      item: {
         type: Schema.Types.ObjectId,
         ref: modelNames.MovieSchedule,
       },
