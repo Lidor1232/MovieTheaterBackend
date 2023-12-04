@@ -6,6 +6,7 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import errorHandlerMiddleware from './routes/middlewares/error.middleware';
 import {useLoggerRequestId} from './routes/middlewares/request-id-middleware';
+import movieSchedule from './routes/api/movieSchedule.route';
 
 const app = express();
 
@@ -32,6 +33,8 @@ app.get('/health', (req: Request, res: Response) => {
     statusCode: 200,
   });
 });
+
+movieSchedule(app);
 
 app.use(errorHandlerMiddleware);
 

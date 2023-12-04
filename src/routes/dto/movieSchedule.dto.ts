@@ -17,3 +17,12 @@ export interface CreateMovieSchedule {
 export interface UpdateMovieSchedule {
   isCancelled?: boolean;
 }
+
+export interface MovieScheduleQueries {
+  startDate?: string;
+  endDate?: string;
+}
+
+export interface GetMoviesSchedule {
+  terms: MovieScheduleQueries;
+}
