@@ -5,6 +5,7 @@ import {PaginationRequestQuery} from '../../../utills/api/pagination/pagination'
 import {SortByQueryParameter} from '../../../utills/api/sort/sort';
 import {modelNames} from '../../../models/constans/constans';
 import {GetMoviesScheduleApiResponse} from './responses/get-movies-schedule-api-response';
+import {GetMovieScheduleDetailsApiResponse} from './responses/get-movie-schedule-details-api-response';
 
 export async function getMoviesSchedule(
   req: Request<
@@ -34,6 +35,25 @@ export async function getMoviesSchedule(
     return res.status(200).json(
       new GetMoviesScheduleApiResponse({
         moviesSchedule,
+      }),
+    );
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export async function getMovieScheduleDetails(
+  req: Request<{movieScheduleId: string}>,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const movieSchedule = await MovieScheduleService.onGetDocByIdOrThrow({
+      movieScheduleId: req.params.movieScheduleId,
+    });
+    return res.status(200).json(
+      new GetMovieScheduleDetailsApiResponse({
+        movieSchedule,
       }),
     );
   } catch (error) {

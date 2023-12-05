@@ -1,6 +1,11 @@
 import {Application} from 'express';
-import {getMoviesSchedule} from '../controllers/movieSchedule/movieSchedule.controller';
+import {
+  getMovieScheduleDetails,
+  getMoviesSchedule,
+} from '../controllers/movieSchedule/movieSchedule.controller';
 
 export default function (app: Application) {
-  app.post('/schedule/movies', getMoviesSchedule);
+  app.post('/movies/schedule', getMoviesSchedule);
+
+  app.get(`/movie/schedule/:movieScheduleId/details`, getMovieScheduleDetails);
 }
