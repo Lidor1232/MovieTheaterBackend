@@ -1,5 +1,6 @@
 import {Application} from 'express';
 import {
+  cancelMovieSchedule,
   createMovieSchedule,
   getMovieScheduleDetails,
   getMoviesSchedule,
@@ -17,4 +18,6 @@ export default function (app: Application) {
     jsonSchemaValidator(createMovieScheduleDtoSchemaValidator),
     createMovieSchedule,
   );
+
+  app.patch('/movie/schedule/:movieScheduleId/cancel', cancelMovieSchedule);
 }

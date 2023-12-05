@@ -94,3 +94,23 @@ export async function createMovieSchedule(
     return next(error);
   }
 }
+
+export async function cancelMovieSchedule(
+  req: Request<{movieScheduleId: string}>,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    await MovieScheduleService.onUpdateDocByIdOrThrow({
+      movieScheduleId: req.params.movieScheduleId,
+      updateMovieSchedule: {
+        status: 'cancelled',
+      },
+    });
+    return res.status(200).json({
+      message: 'Cancelled movie schedule',
+    });
+  } catch (error) {
+    return next(error);
+  }
+}

@@ -21,7 +21,7 @@ export interface CreateMovieScheduleRoute {
 }
 
 export interface UpdateMovieSchedule {
-  status: MovieScheduleStatus;
+  status?: MovieScheduleStatus;
 }
 
 export interface MovieScheduleQueries {
@@ -33,7 +33,13 @@ export interface GetMoviesSchedule {
   terms: MovieScheduleQueries;
 }
 
-export const movieScheduleStatuses = {
+export interface MovieScheduleStatuses {
+  active: 'active';
+  deleted: 'deleted';
+  cancelled: 'cancelled';
+}
+
+export const movieScheduleStatuses: MovieScheduleStatuses = {
   active: 'active',
   deleted: 'deleted',
   cancelled: 'cancelled',
