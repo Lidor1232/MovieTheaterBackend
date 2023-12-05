@@ -1,7 +1,7 @@
 export interface MovieSchedule {
   _id: string;
+  status: MovieScheduleStatus;
   seats: string[];
-  isCancelled: boolean;
   date: string;
   movie: string;
   createdAt: string;
@@ -9,13 +9,12 @@ export interface MovieSchedule {
 }
 
 export interface CreateMovieSchedule {
-  seats: string[];
   date: string;
   movie: string;
 }
 
 export interface UpdateMovieSchedule {
-  isCancelled?: boolean;
+  status: MovieScheduleStatus;
 }
 
 export interface MovieScheduleQueries {
@@ -26,3 +25,14 @@ export interface MovieScheduleQueries {
 export interface GetMoviesSchedule {
   terms: MovieScheduleQueries;
 }
+
+export const movieScheduleStatuses = {
+  active: 'active',
+  deleted: 'deleted',
+  cancelled: 'cancelled',
+};
+
+export type MovieScheduleStatus =
+  | typeof movieScheduleStatuses.active
+  | typeof movieScheduleStatuses.deleted
+  | typeof movieScheduleStatuses.cancelled;

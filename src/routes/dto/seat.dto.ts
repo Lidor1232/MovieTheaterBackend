@@ -5,16 +5,13 @@ export interface Seat extends mongoose.Document {
   movieSchedule: string;
   isOrdered: boolean;
   numOfSeat: number;
-  movie: string;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface CreateSeat {
   movieSchedule: string;
-  isOrdered: boolean;
   numOfSeat: number;
-  movie: string;
 }
 
 export interface UpdateSeat {

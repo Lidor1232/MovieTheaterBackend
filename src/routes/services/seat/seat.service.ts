@@ -1,7 +1,8 @@
 import logger from '../../../config/logger';
 import {SeatModel} from '../../../models/seat.model';
-import {UpdateSeat} from '../../dto/seat.dto';
+import {CreateSeat, Seat, UpdateSeat} from '../../dto/seat.dto';
 import BadRequestError from '../../../errors/bad-request-error';
+import * as MovieScheduleService from '../../services/movieSchedule/movieSchedule.service';
 
 export async function onGetDocsByMovieScheduleId({
   movieScheduleId,
@@ -90,4 +91,30 @@ export async function onOrderSeatByIdOrThrow({
     },
     'Ordered seat by id or throw',
   );
+}
+
+export async function onCreateDoc({seat}: {seat: CreateSeat}): Promise<Seat> {
+  logger.debug(
+    {
+      seat,
+    },
+    'Creating seat',
+  );
+  const createdSeat = await SeatModel.create(seat);
+
+  await Promise.all([
+    MovieScheduleService.onAddSeatBySeatIdOrThrow({
+      seatId: createdSeat._id,
+      movieScheduleId: seat.movieSchedule,
+    }),
+  ]);
+
+  logger.info(
+    {
+      seat,
+      createdSeat,
+    },
+    'Created seat',
+  );
+  return createdSeat;
 }

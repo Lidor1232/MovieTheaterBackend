@@ -14,11 +14,6 @@ const SeatSchema = new Schema<Seat>(
       ref: modelNames.MovieSchedule,
       required: true,
     },
-    movie: {
-      type: Schema.Types.ObjectId,
-      ref: modelNames.Movie,
-      required: true,
-    },
     numOfSeat: {
       type: Number,
       required: true,

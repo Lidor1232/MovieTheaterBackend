@@ -1,6 +1,9 @@
 import {Request, Response, NextFunction} from 'express';
 import * as MovieScheduleService from '../../services/movieSchedule/movieSchedule.service';
-import {GetMoviesSchedule} from '../../dto/movieSchedule.dto';
+import {
+  CreateMovieSchedule,
+  GetMoviesSchedule,
+} from '../../dto/movieSchedule.dto';
 import {PaginationRequestQuery} from '../../../utills/api/pagination/pagination';
 import {SortByQueryParameter} from '../../../utills/api/sort/sort';
 import {modelNames} from '../../../models/constans/constans';
@@ -56,6 +59,21 @@ export async function getMovieScheduleDetails(
         movieSchedule,
       }),
     );
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export async function createMovieSchedule(
+  req: Request<unknown, unknown, CreateMovieSchedule>,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    await MovieScheduleService.onCreateDoc({
+      movieSchedule: req.body,
+    });
+    return res.status(200).json({message: 'Created movie schedule'});
   } catch (error) {
     return next(error);
   }

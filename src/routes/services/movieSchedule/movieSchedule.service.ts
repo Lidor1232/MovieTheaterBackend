@@ -1,9 +1,16 @@
-import {MovieScheduleQueries} from '../../dto/movieSchedule.dto';
+import {
+  CreateMovieSchedule,
+  MovieSchedule,
+  MovieScheduleQueries,
+  UpdateMovieSchedule,
+} from '../../dto/movieSchedule.dto';
 import {PaginationRequestQuery} from '../../../utills/api/pagination/pagination';
 import {MovieScheduleModel} from '../../../models/movieSchedule.model';
 import {FilterQuery, PopulateOptions} from 'mongoose';
 import logger from '../../../config/logger';
 import NotFoundError from '../../../errors/not-found-error';
+import * as MovieService from '../../services/movie/movie.service';
+import * as SeatService from '../../services/seat/seat.service';
 
 export function onGetMongooseQueriesByDocQueries({
   queries,
@@ -143,4 +150,136 @@ export async function onGetDocByIdOrThrow({
     'Got movie schedule by id or throw',
   );
   return movieSchedule;
+}
+
+export async function onUpdateDocByIdOrThrow({
+  updateMovieSchedule,
+  movieScheduleId,
+}: {
+  movieScheduleId: string;
+  updateMovieSchedule: UpdateMovieSchedule;
+}): Promise<void> {
+  logger.debug(
+    {
+      updateMovieSchedule,
+      movieScheduleId,
+    },
+    'Updating movie schedule by id or throw',
+  );
+  const updatedResult = await MovieScheduleModel.updateOne(
+    {
+      _id: movieScheduleId,
+    },
+    {
+      $set: updateMovieSchedule,
+    },
+  );
+  if (updatedResult.nModified === 0) {
+    throw new Error(`Movie schedule ${movieScheduleId} not updated`);
+  }
+  logger.info(
+    {
+      movieScheduleId,
+      updateMovieSchedule,
+    },
+    'Updated movie schedule by id or throw',
+  );
+}
+
+export async function onAddSeatBySeatIdOrThrow({
+  seatId,
+  movieScheduleId,
+}: {
+  movieScheduleId: string;
+  seatId: string;
+}): Promise<void> {
+  logger.debug(
+    {
+      seatId,
+      movieScheduleId,
+    },
+    'Adding seat by seat id or throw',
+  );
+  const updatedResult = await MovieScheduleModel.updateOne(
+    {
+      _id: movieScheduleId,
+    },
+    {
+      $push: {
+        seats: seatId,
+      },
+    },
+  );
+  if (updatedResult.nModified === 0) {
+    throw new Error(
+      `Seat ${seatId} not added to movie schedule ${movieScheduleId} seats`,
+    );
+  }
+  logger.info(
+    {
+      movieScheduleId,
+      seatId,
+    },
+    'Added seat by seat id or throw',
+  );
+}
+
+export async function onCreateDoc({
+  movieSchedule,
+}: {
+  movieSchedule: CreateMovieSchedule;
+}): Promise<MovieSchedule> {
+  logger.debug(
+    {
+      movieSchedule,
+    },
+    'Creating movie schedule',
+  );
+  const createdMovieSchedule = await MovieScheduleModel.create(movieSchedule);
+  await Promise.all([
+    MovieService.onAddMovieScheduleByIdOrThrow({
+      movieId: movieSchedule.movie,
+      movieScheduleId: createdMovieSchedule._id,
+    }),
+    onCreateDocSeatsByIdOrThrow({
+      movieScheduleId: createdMovieSchedule._id,
+    }),
+  ]);
+  logger.info(
+    {
+      movieSchedule,
+    },
+    'Created movie schedule',
+  );
+  return createdMovieSchedule;
+}
+
+export async function onCreateDocSeatsByIdOrThrow({
+  movieScheduleId,
+}: {
+  movieScheduleId: string;
+}): Promise<void> {
+  logger.debug(
+    {
+      movieScheduleId,
+    },
+    'Creating movie schedule seats by id or throw',
+  );
+  const seatsNumArr = Array.from({length: 100}, (_, index) => index + 1);
+  await Promise.all(
+    seatsNumArr.map(seatNum =>
+      SeatService.onCreateDoc({
+        seat: {
+          movieSchedule: movieScheduleId,
+          numOfSeat: seatNum,
+        },
+      }),
+    ),
+  );
+  logger.info(
+    {
+      movieScheduleId,
+    },
+    'Created doc seats',
+  );
 }
