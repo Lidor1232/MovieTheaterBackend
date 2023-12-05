@@ -1,4 +1,6 @@
-export interface Seat {
+import mongoose from 'mongoose';
+
+export interface Seat extends mongoose.Document {
   _id: string;
   movieSchedule: string;
   isOrdered: boolean;
@@ -17,4 +19,8 @@ export interface CreateSeat {
 
 export interface UpdateSeat {
   isOrdered?: boolean;
+}
+
+export interface OrderSeat {
+  seatId: string;
 }

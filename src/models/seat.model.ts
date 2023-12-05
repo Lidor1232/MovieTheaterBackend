@@ -29,4 +29,4 @@ const SeatSchema = new Schema<Seat>(
   },
 );
 
-export const SeatModel = model(modelNames.Seat, SeatSchema);
+export const SeatModel = model<Seat>(modelNames.Seat, SeatSchema);
