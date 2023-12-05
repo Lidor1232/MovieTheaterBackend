@@ -5,7 +5,7 @@ export class GetMoviesScheduleApiResponse {
   moviesSchedule: {
     movie: MovieApiResponse;
     date: string;
-    isCancelled: boolean;
+    status: string;
   }[];
 
   constructor({
@@ -14,11 +14,12 @@ export class GetMoviesScheduleApiResponse {
     moviesSchedule: {
       movie: Movie;
       date: string;
-      isCancelled: boolean;
+      status: string;
     }[];
   }) {
     this.moviesSchedule = moviesSchedule.map(movieSchedule => ({
-      ...movieSchedule,
+      date: movieSchedule.date,
+      status: movieSchedule.status,
       movie: new MovieApiResponse({
         movie: movieSchedule.movie,
       }),

@@ -25,11 +25,6 @@ const MovieScheduleSchema = new Schema<MovieSchedule>(
       },
       required: true,
     },
-    isCancelled: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
     date: {
       type: String,
       required: true,
