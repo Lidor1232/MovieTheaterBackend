@@ -10,6 +10,7 @@ import {SortByQueryParameter} from '../../../utills/api/sort/sort';
 import {modelNames} from '../../../models/constans/constans';
 import {GetMoviesScheduleApiResponse} from './responses/get-movies-schedule-api-response';
 import {GetMovieScheduleDetailsApiResponse} from './responses/get-movie-schedule-details-api-response';
+import {onMovieScheduleTimeEmptyOrThrow} from '../../services/movieSchedule/movieSchedule.service';
 
 export async function getMoviesSchedule(
   req: Request<
@@ -76,6 +77,10 @@ export async function createMovieSchedule(
         movieId: req.body.movie,
         date: req.body.date,
       });
+    await onMovieScheduleTimeEmptyOrThrow({
+      endDate: movieScheduleEndDate,
+      startDate: req.body.date,
+    });
     const movieSchedule: CreateMovieSchedule = {
       movie: req.body.movie,
       startDate: req.body.date,

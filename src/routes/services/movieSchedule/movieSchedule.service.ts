@@ -13,6 +13,7 @@ import * as MovieService from '../../services/movie/movie.service';
 import * as SeatService from '../../services/seat/seat.service';
 import {Movie} from '../../dto/movie.dto';
 import {onGetAddedDate} from '../../../utills/js/date/date';
+import BadRequestError from '../../../errors/bad-request-error';
 
 export function onGetMongooseQueriesByDocQueries({
   queries,
@@ -314,24 +315,6 @@ export function onGetMovieScheduleEndDateByDate({
   return movieScheduleEndDate;
 }
 
-// export async function onGetIsScheduleForMovieScheduleIsClearByIdOrThrow({
-//   movieScheduleId,
-// }: {
-//   movieScheduleId: string;
-// }): Promise<void> {
-//   const movieSchedule: Omit<MovieSchedule, 'movie'> & {
-//     movie: Movie;
-//   } = await onGetDocByIdOrThrow({
-//     movieScheduleId,
-//     populate: [
-//       {
-//         model: modelNames.Movie,
-//         path: 'movie',
-//       },
-//     ],
-//   });
-// }
-
 export async function onGetDocEndDateByMovieIdOrThrow({
   movieId,
   date,
@@ -361,4 +344,105 @@ export async function onGetDocEndDateByMovieIdOrThrow({
     'Got movie schedule end date by movie id or throw',
   );
   return endDate;
+}
+
+export async function onGetMoviesScheduleInTime({
+  startDate,
+  endDate,
+}: {
+  startDate: string;
+  endDate: string;
+}) {
+  logger.debug(
+    {
+      startDate,
+      endDate,
+    },
+    'Getting movies schedule in time',
+  );
+  const moviesSchedule = await MovieScheduleModel.find({
+    $or: [
+      {
+        startDate: {
+          $lte: startDate,
+          $gte: endDate,
+        },
+      },
+      {
+        endDate: {
+          $lte: startDate,
+          $gte: endDate,
+        },
+      },
+    ],
+  });
+  logger.info(
+    {
+      startDate,
+      endDate,
+      moviesSchedule,
+    },
+    'Got movies schedule in time',
+  );
+  return moviesSchedule;
+}
+
+export async function onGetIsMovieScheduleTimeEmpty({
+  startDate,
+  endDate,
+}: {
+  startDate: string;
+  endDate: string;
+}): Promise<boolean> {
+  logger.debug(
+    {
+      startDate,
+      endDate,
+    },
+    'Getting is movie schedule time empty',
+  );
+  const moviesSchedule: MovieSchedule[] = await onGetMoviesScheduleInTime({
+    startDate,
+    endDate,
+  });
+  const isMovieScheduleEmpty = moviesSchedule.length === 0;
+  logger.info(
+    {
+      isMovieScheduleEmpty,
+      startDate,
+      endDate,
+    },
+    'Got is movie schedule time empty',
+  );
+  return isMovieScheduleEmpty;
+}
+
+export async function onMovieScheduleTimeEmptyOrThrow({
+  startDate,
+  endDate,
+}: {
+  startDate: string;
+  endDate: string;
+}): Promise<void> {
+  logger.debug(
+    {
+      startDate,
+      endDate,
+    },
+    'Getting movie schedule time empty or throw',
+  );
+  const isMovieScheduleTimeEmpty = await onGetIsMovieScheduleTimeEmpty({
+    startDate,
+    endDate,
+  });
+  if (!isMovieScheduleTimeEmpty) {
+    throw new BadRequestError('Movie schedule time is not empty');
+  }
+  logger.info(
+    {
+      startDate,
+      endDate,
+    },
+    'Got Movie schedule time empty or throw',
+  );
 }
