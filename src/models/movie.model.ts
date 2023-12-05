@@ -1,9 +1,15 @@
 import {model, Schema} from 'mongoose';
-import {Movie} from '../routes/dto/movie.dto';
+import {Movie, movieStatuses} from '../routes/dto/movie.dto';
 import {modelNames} from './constans/constans';
 
 const MovieSchema = new Schema<Movie>(
   {
+    status: {
+      type: String,
+      enum: [movieStatuses.active, movieStatuses.deleted],
+      default: movieStatuses.active,
+      required: true,
+    },
     title: {
       type: String,
       required: true,

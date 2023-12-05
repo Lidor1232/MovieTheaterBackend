@@ -8,6 +8,7 @@ import errorHandlerMiddleware from './routes/middlewares/error.middleware';
 import {useLoggerRequestId} from './routes/middlewares/request-id-middleware';
 import movieSchedule from './routes/api/movieSchedule.route';
 import seat from './routes/api/seat.route';
+import movie from './routes/api/movie.route';
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.get('/health', (req: Request, res: Response) => {
 
 movieSchedule(app);
 seat(app);
+movie(app);
 
 app.use(errorHandlerMiddleware);
 
