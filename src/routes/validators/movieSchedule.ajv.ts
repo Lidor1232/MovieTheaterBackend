@@ -1,7 +1,7 @@
 import {JSONSchemaType} from 'ajv';
-import {CreateMovieSchedule} from '../dto/movieSchedule.dto';
+import {CreateMovieScheduleRoute} from '../dto/movieSchedule.dto';
 
-export const createMovieScheduleDtoSchemaValidator: JSONSchemaType<CreateMovieSchedule> =
+export const createMovieScheduleDtoSchemaValidator: JSONSchemaType<CreateMovieScheduleRoute> =
   {
     type: 'object',
     properties: {

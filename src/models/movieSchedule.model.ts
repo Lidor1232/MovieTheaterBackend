@@ -34,6 +34,10 @@ const MovieScheduleSchema = new Schema<MovieSchedule>(
       type: String,
       required: true,
     },
+    endDate: {
+      type: String,
+      required: true,
+    },
     movie: {
       type: Schema.Types.ObjectId,
       ref: modelNames.Movie,

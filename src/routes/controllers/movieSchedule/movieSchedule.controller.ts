@@ -2,6 +2,7 @@ import {Request, Response, NextFunction} from 'express';
 import * as MovieScheduleService from '../../services/movieSchedule/movieSchedule.service';
 import {
   CreateMovieSchedule,
+  CreateMovieScheduleRoute,
   GetMoviesSchedule,
 } from '../../dto/movieSchedule.dto';
 import {PaginationRequestQuery} from '../../../utills/api/pagination/pagination';
@@ -65,13 +66,23 @@ export async function getMovieScheduleDetails(
 }
 
 export async function createMovieSchedule(
-  req: Request<unknown, unknown, CreateMovieSchedule>,
+  req: Request<unknown, unknown, CreateMovieScheduleRoute>,
   res: Response,
   next: NextFunction,
 ) {
   try {
+    const movieScheduleEndDate =
+      await MovieScheduleService.onGetDocEndDateByMovieIdOrThrow({
+        movieId: req.body.movie,
+        date: req.body.date,
+      });
+    const movieSchedule: CreateMovieSchedule = {
+      movie: req.body.movie,
+      startDate: req.body.date,
+      endDate: movieScheduleEndDate,
+    };
     await MovieScheduleService.onCreateDoc({
-      movieSchedule: req.body,
+      movieSchedule: movieSchedule,
     });
     return res.status(200).json({message: 'Created movie schedule'});
   } catch (error) {

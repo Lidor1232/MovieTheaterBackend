@@ -11,6 +11,8 @@ import logger from '../../../config/logger';
 import NotFoundError from '../../../errors/not-found-error';
 import * as MovieService from '../../services/movie/movie.service';
 import * as SeatService from '../../services/seat/seat.service';
+import {Movie} from '../../dto/movie.dto';
+import {onGetAddedDate} from '../../../utills/js/date/date';
 
 export function onGetMongooseQueriesByDocQueries({
   queries,
@@ -282,4 +284,81 @@ export async function onCreateDocSeatsByIdOrThrow({
     },
     'Created doc seats',
   );
+}
+
+export function onGetMovieScheduleEndDateByDate({
+  date,
+  durationInMinutes,
+}: {
+  date: string;
+  durationInMinutes: number;
+}): string {
+  logger.debug(
+    {
+      date,
+    },
+    'Getting movie schedule end date by date',
+  );
+  const movieScheduleEndDate = onGetAddedDate({
+    date,
+    amount: durationInMinutes,
+    unit: 'minutes',
+  });
+  logger.info(
+    {
+      date,
+      movieScheduleEndDate,
+    },
+    'Got movie schedule end date by date',
+  );
+  return movieScheduleEndDate;
+}
+
+// export async function onGetIsScheduleForMovieScheduleIsClearByIdOrThrow({
+//   movieScheduleId,
+// }: {
+//   movieScheduleId: string;
+// }): Promise<void> {
+//   const movieSchedule: Omit<MovieSchedule, 'movie'> & {
+//     movie: Movie;
+//   } = await onGetDocByIdOrThrow({
+//     movieScheduleId,
+//     populate: [
+//       {
+//         model: modelNames.Movie,
+//         path: 'movie',
+//       },
+//     ],
+//   });
+// }
+
+export async function onGetDocEndDateByMovieIdOrThrow({
+  movieId,
+  date,
+}: {
+  movieId: string;
+  date: string;
+}): Promise<string> {
+  logger.debug(
+    {
+      movieId,
+    },
+    'Getting movie schedule end date by movie id or throw',
+  );
+  const movie: Movie = await MovieService.onGetDocByIdOrThrow({
+    movieId,
+  });
+  const endDate = onGetMovieScheduleEndDateByDate({
+    date,
+    durationInMinutes: movie.durationInMinutes,
+  });
+  logger.info(
+    {
+      movieId,
+      date,
+      endDate,
+    },
+    'Got movie schedule end date by movie id or throw',
+  );
+  return endDate;
 }

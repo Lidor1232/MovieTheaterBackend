@@ -2,13 +2,20 @@ export interface MovieSchedule {
   _id: string;
   status: MovieScheduleStatus;
   seats: string[];
-  date: string;
+  startDate: string;
+  endDate: string;
   movie: string;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface CreateMovieSchedule {
+  startDate: string;
+  endDate: string;
+  movie: string;
+}
+
+export interface CreateMovieScheduleRoute {
   date: string;
   movie: string;
 }
