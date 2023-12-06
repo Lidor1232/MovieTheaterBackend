@@ -3,19 +3,19 @@ import {MovieApiResponse} from '../../movie/responses/movie-api-response';
 
 export class GetMovieScheduleDetailsApiResponse {
   movie: MovieApiResponse;
-  date: string;
+  startDate: string;
 
   constructor({
     movieSchedule,
   }: {
     movieSchedule: {
       movie: Movie;
-      date: string;
+      startDate: string;
     };
   }) {
     this.movie = new MovieApiResponse({
       movie: movieSchedule.movie,
     });
-    this.date = movieSchedule.date;
+    this.startDate = movieSchedule.startDate;
   }
 }

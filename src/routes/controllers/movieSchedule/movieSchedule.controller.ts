@@ -62,6 +62,12 @@ export async function getMovieScheduleDetails(
   try {
     const movieSchedule = await MovieScheduleService.onGetDocByIdOrThrow({
       movieScheduleId: req.params.movieScheduleId,
+      populate: [
+        {
+          model: modelNames.Movie,
+          path: 'movie',
+        },
+      ],
     });
     return res.status(200).json(
       new GetMovieScheduleDetailsApiResponse({
