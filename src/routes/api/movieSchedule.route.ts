@@ -21,7 +21,7 @@ export default function (app: Application) {
   app.get(`/movie/schedule/:movieScheduleId/details`, getMovieScheduleDetails);
 
   app.post(
-    'movie/schedule/create',
+    '/movie/schedule/create',
     jsonSchemaValidator(createMovieScheduleDtoSchemaValidator),
     createMovieSchedule,
   );
