@@ -7,7 +7,7 @@ import jsonSchemaValidator from '../middlewares/validation.middleware';
 import {orderSeatDtoSchemaValidator} from '../validators/seat.ajv';
 
 export default function (app: Application) {
-  app.get('/movie/schedule/seats/:movieScheduleId', getMovieScheduleSeats);
+  app.get('/movie/schedule/:movieScheduleId/seats/', getMovieScheduleSeats);
 
   app.post(
     '/movie/schedule/seat/order',
