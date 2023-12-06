@@ -20,7 +20,7 @@ export default function (app: Application) {
   );
 
   app.put(
-    '/movie',
+    '/movie/:movieId/',
     jsonSchemaValidator(updateMovieDtoSchemaValidator),
     updateMovie,
   );
