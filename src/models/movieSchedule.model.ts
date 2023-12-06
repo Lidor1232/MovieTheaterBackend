@@ -25,7 +25,7 @@ const MovieScheduleSchema = new Schema<MovieSchedule>(
       },
       required: true,
     },
-    date: {
+    startDate: {
       type: String,
       required: true,
     },
