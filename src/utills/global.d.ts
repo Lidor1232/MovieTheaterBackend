@@ -4,3 +4,9 @@ declare global {
     interface Request {}
   }
 }
+
+declare module 'mongoose' {
+  interface UpdateWriteOpResult {
+    nModified?: number;
+  }
+}
