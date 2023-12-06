@@ -1,5 +1,8 @@
 import {JSONSchemaType} from 'ajv';
-import {CreateMovieScheduleRoute} from '../dto/movieSchedule.dto';
+import {
+  CreateMovieScheduleRoute,
+  GetMoviesSchedule,
+} from '../dto/movieSchedule.dto';
 
 export const createMovieScheduleDtoSchemaValidator: JSONSchemaType<CreateMovieScheduleRoute> =
   {
@@ -12,5 +15,30 @@ export const createMovieScheduleDtoSchemaValidator: JSONSchemaType<CreateMovieSc
         type: 'string',
       },
     },
+    additionalProperties: false,
     required: ['movie', 'date'],
+  };
+
+export const getMoviesScheduleDtoSchemaValidator: JSONSchemaType<GetMoviesSchedule> =
+  {
+    type: 'object',
+    properties: {
+      terms: {
+        type: 'object',
+        properties: {
+          startDate: {
+            type: 'string',
+            nullable: true,
+          },
+          endDate: {
+            type: 'string',
+            nullable: true,
+          },
+        },
+        required: [],
+        additionalProperties: false,
+      },
+    },
+    additionalProperties: false,
+    required: [],
   };

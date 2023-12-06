@@ -8,5 +8,6 @@ export const orderSeatDtoSchemaValidator: JSONSchemaType<OrderSeat> = {
       type: 'string',
     },
   },
+  additionalProperties: false,
   required: ['seatId'],
 };

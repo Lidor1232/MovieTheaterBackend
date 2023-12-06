@@ -6,10 +6,17 @@ import {
   getMoviesSchedule,
 } from '../controllers/movieSchedule/movieSchedule.controller';
 import jsonSchemaValidator from '../middlewares/validation.middleware';
-import {createMovieScheduleDtoSchemaValidator} from '../validators/movieSchedule.ajv';
+import {
+  createMovieScheduleDtoSchemaValidator,
+  getMoviesScheduleDtoSchemaValidator,
+} from '../validators/movieSchedule.ajv';
 
 export default function (app: Application) {
-  app.post('/movies/schedule', getMoviesSchedule);
+  app.post(
+    '/movies/schedule',
+    jsonSchemaValidator(getMoviesScheduleDtoSchemaValidator),
+    getMoviesSchedule,
+  );
 
   app.get(`/movie/schedule/:movieScheduleId/details`, getMovieScheduleDetails);
 

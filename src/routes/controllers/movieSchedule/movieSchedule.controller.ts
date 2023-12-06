@@ -5,8 +5,7 @@ import {
   CreateMovieScheduleRoute,
   GetMoviesSchedule,
 } from '../../dto/movieSchedule.dto';
-import {PaginationRequestQuery} from '../../../utills/api/pagination/pagination';
-import {SortByQueryParameter} from '../../../utills/api/sort/sort';
+import {onGetPaginationParams} from '../../../utills/api/pagination/pagination';
 import {modelNames} from '../../../models/constans/constans';
 import {GetMoviesScheduleApiResponse} from './responses/get-movies-schedule-api-response';
 import {GetMovieScheduleDetailsApiResponse} from './responses/get-movie-schedule-details-api-response';
@@ -17,16 +16,24 @@ export async function getMoviesSchedule(
     unknown,
     unknown,
     GetMoviesSchedule,
-    PaginationRequestQuery & SortByQueryParameter
+    {
+      page?: number;
+      limit?: number;
+      sortBy?: string;
+    }
   >,
   res: Response,
   next: NextFunction,
 ) {
   try {
+    const paginationParams = onGetPaginationParams({
+      page: req.query.page,
+      limit: req.query.limit,
+    });
     const moviesSchedule = await MovieScheduleService.onGetDocs({
       paginationParams: {
-        skip: req.query.skip,
-        limit: req.query.limit,
+        skip: paginationParams.skip,
+        limit: paginationParams.limit,
       },
       queries: req.body.terms,
       sortBy: req.query.sortBy,
