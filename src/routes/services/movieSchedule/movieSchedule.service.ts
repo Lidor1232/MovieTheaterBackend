@@ -29,7 +29,7 @@ export function onGetMongooseQueriesByDocQueries({
   const mongooseQueries = {
     ...(queries.startDate || queries.endDate
       ? {
-          date: {
+          startDate: {
             ...(queries.startDate
               ? {
                   $gte: queries.startDate,
@@ -51,7 +51,7 @@ export function onGetMongooseQueriesByDocQueries({
     },
     'Got mongoose queries by movie schedule queries',
   );
-  return;
+  return mongooseQueries;
 }
 
 export async function onGetDocs({

@@ -40,5 +40,5 @@ export const getMoviesScheduleDtoSchemaValidator: JSONSchemaType<GetMoviesSchedu
       },
     },
     additionalProperties: false,
-    required: [],
+    required: ['terms'],
   };
