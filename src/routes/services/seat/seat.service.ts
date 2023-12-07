@@ -47,6 +47,7 @@ export async function onUpdateDocByIdOrThrow({
       $set: updateDoc,
     },
   );
+  // @ts-ignore
   if (updatedResult.nModified === 0) {
     throw new Error(`Seat ${seatId} not updated`);
   }
@@ -71,6 +72,7 @@ export async function onOrderSeatByIdOrThrow({
     },
     'Ordering seat by id or throw',
   );
+  // @ts-ignore
   const updatedResult = await SeatModel.updateOne(
     {
       _id: seatId,
@@ -82,6 +84,7 @@ export async function onOrderSeatByIdOrThrow({
       },
     },
   );
+  // @ts-ignore
   if (updatedResult.nModified === 0) {
     throw new BadRequestError(`Seat ${seatId} is already ordered`);
   }
